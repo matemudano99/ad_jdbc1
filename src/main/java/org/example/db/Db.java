@@ -1,4 +1,4 @@
-package org.example;
+package org.example.db;
 
 import java.io.InputStream;
 import java.sql.Connection;
