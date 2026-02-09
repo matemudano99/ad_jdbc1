@@ -158,4 +158,27 @@ public class JdbcLibroRepository implements LibroRepository {
         }
     }
 
+    public int[] insertBatch(Connection con, List<Libro> libros) throws SQLException {
+    String sql = "INSERT INTO libro (titulo, isbn, anio, disponible) VALUES (?, ?, ?, ?)"; 
+    try (PreparedStatement ps = con.prepareStatement(sql)) { 
+        for (Libro l : libros) {
+            ps.setString(1, l.getTitulo());
+            ps.setString(2, l.getIsbn());
+            
+            // Manejo de nulos para el año
+            if (l.getAnio() == null) {
+                ps.setObject(3, null);
+            } else {
+                ps.setInt(3, l.getAnio());
+            }
+            
+            ps.setBoolean(4, l.isDisponible()); 
+            ps.addBatch(); 
+        
+        }
+        return ps.executeBatch(); 
+    
+    }
+}
+
 }
